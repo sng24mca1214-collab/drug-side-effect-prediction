@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Ignore datasets
 dataset/
 datasets/
@@ -16,3 +17,24 @@ node_modules/
 *.pdf
 *.pptx
 
+=======
+# Ignore dataset folders
+dataset/
+datasets/
+
+# Ignore common data files
+*.csv
+*.tsv
+*.xlsx
+*.zip
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore virtual environment
+venv/
+
+# Ignore logs
+*.log
+>>>>>>> f7301e19cbe724d1c7617768bfa3c53da4e443c2
