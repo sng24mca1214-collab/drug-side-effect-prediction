@@ -1,0 +1,19 @@
+# Ignore dataset folders
+dataset/
+datasets/
+
+# Ignore common data files
+*.csv
+*.tsv
+*.xlsx
+*.zip
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore virtual environment
+venv/
+
+# Ignore logs
+*.log
