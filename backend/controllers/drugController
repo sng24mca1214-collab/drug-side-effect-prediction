@@ -1,0 +1,58 @@
+const axios = require("axios");
+const Log = require("../models/Log");
+
+/**
+ * 🔍 Predict drug side effects (User API)
+ * Route: GET /api/drug/predict?drug=Aspirin
+ */
+exports.predictDrug = async (req, res) => {
+  try {
+    const { drug } = req.query;
+
+    if (!drug) {
+      return res.status(400).json({ error: "Drug name is required" });
+    }
+
+    // 🔗 Call Flask ML API
+    const mlResponse = await axios.get(
+      `http://127.0.0.1:5000/predict`,
+      { params: { drug } }
+    );
+
+    const result = mlResponse.data;
+
+    // 🧾 Save log (for admin + user history)
+    await Log.create({
+      username: req.user?.username || "guest",
+      drug: drug,
+      risk: result.risk,
+      searchedAt: new Date(),
+    });
+
+    return res.json(result);
+  } catch (err) {
+    console.error("Prediction error:", err.message);
+
+    return res.status(500).json({
+      error: "Failed to predict drug side effects",
+    });
+  }
+};
+
+exports.getUserHistory = async (req, res) => {
+  try {
+    const username = req.user?.username;
+
+    if (!username) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const history = await Log.find({ username })
+      .sort({ searchedAt: -1 });
+
+    res.json(history);
+  } catch (err) {
+    console.error("History fetch error:", err.message);
+    res.status(500).json({ error: "Failed to fetch history" });
+  }
+};
